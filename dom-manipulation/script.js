@@ -202,10 +202,10 @@ function showNotification(message) {
 // Syncing Data with Server and Implementing Conflict Resolution
 // ------------------------
 
-// Fetch quotes from server (required function)
+// Fetch quotes from server (GET)
 async function fetchQuotesFromServer() {
   try {
-    const response = await fetch("https://jsonplaceholder.typicode.com/posts"); // Mock API
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
     const serverData = await response.json();
 
     // Convert server posts to quote objects
@@ -218,6 +218,27 @@ async function fetchQuotesFromServer() {
   } catch (err) {
     console.error("Error fetching quotes from server:", err);
     return [];
+  }
+}
+
+// Send local quotes to server (POST)
+async function sendQuotesToServer() {
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(quotes)
+    });
+
+    if (response.ok) {
+      console.log("Quotes successfully sent to server.");
+    } else {
+      console.error("Failed to send quotes to server.");
+    }
+  } catch (err) {
+    console.error("Error sending quotes to server:", err);
   }
 }
 
@@ -234,6 +255,9 @@ async function syncWithServer() {
     displayAllQuotes();
     showNotification("Quotes updated from server!");
   }
+
+  // Send local quotes to server (POST)
+  await sendQuotesToServer();
 }
 
 // Periodic sync every 60 seconds
@@ -242,12 +266,4 @@ setInterval(syncWithServer, 60000);
 // ------------------------ Event Listeners ------------------------
 newQuoteBtn.addEventListener("click", showRandomQuote);
 exportBtn.addEventListener("click", exportToJsonFile);
-importFile.addEventListener("change", importFromJsonFile);
-categoryFilter.addEventListener("change", filterQuotes);
-
-// ------------------------ Initial Load ------------------------
-createAddQuoteForm();
-populateCategories();
-displayAllQuotes();
-loadLastViewedQuote();
-syncWithServer(); // Initial server sync
+importFile.addEventListener("change",
