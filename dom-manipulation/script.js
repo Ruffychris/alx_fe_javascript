@@ -238,7 +238,7 @@ async function syncQuotes() {
     saveQuotes();
     populateCategories();
     displayAllQuotes();
-    showNotification("Quotes updated from server!");
+    showNotification("Quotes synced with server!"); // <- Exact string required
   }
 
   await sendQuotesToServer();
