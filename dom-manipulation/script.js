@@ -198,7 +198,9 @@ function showNotification(message) {
   setTimeout(() => notificationDiv.style.display = "none", 4000);
 }
 
-// ------------------------ Server Sync ------------------------
+// ------------------------
+// Syncing Data with Server and Implementing Conflict Resolution
+// ------------------------
 
 // Fetch quotes from server (required function)
 async function fetchQuotesFromServer() {
